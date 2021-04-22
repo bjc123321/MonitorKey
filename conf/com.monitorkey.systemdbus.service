@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=com.monitorkey.systemdbus
+Exec=/usr/bin/monitorkeyDbus
+User=root
