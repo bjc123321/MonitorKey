@@ -874,6 +874,7 @@ MonitorKeyEvent::MonitorKeyEvent(int argc, char *argv[])
 
 
     do{
+        //线控进此处
         //int pollres =
         int pollres=poll(ufds, nfds, KEY_TIME_WAIT);
         if(pollres == 0 || send_flag)
@@ -922,7 +923,7 @@ MonitorKeyEvent::MonitorKeyEvent(int argc, char *argv[])
                     //     continue;
                     // }
                     
-                    if (event.type==EV_KEY)//按键情况下，
+                    if (event.type==EV_KEY)//按键情况下，(EV_KEY类型可进)
                     {
                          cur_ms = (event.time.tv_sec * 1000) + (event.time.tv_usec/1000);//时间整形
                          printf("cur_ms:%ld type:0x%x code:%d value:%d\n",
@@ -953,16 +954,26 @@ MonitorKeyEvent::MonitorKeyEvent(int argc, char *argv[])
                                 message =QDBusMessage::createSignal("/", "com.monitorkey.interface", "monitorkey");
                                 message<<QString("%1:%2").arg(KEY_PLAYCD).arg(event.value);
                                 QDBusConnection::systemBus().send(message);
+                                printf("\n********bluetools keyValue:%d********\n",KEY_PAUSECD);
                                 break;
                             case KEY_PAUSECD:
                                 message =QDBusMessage::createSignal("/", "com.monitorkey.interface", "monitorkey");
                                 message<<QString("%1:%2").arg(KEY_PAUSECD).arg(event.value);
                                 QDBusConnection::systemBus().send(message);
+                                printf("\n********bluetools keyValue:%d********\n",KEY_PAUSECD);
                                break;
                             case KEY_NEXTSONG:
                                 message =QDBusMessage::createSignal("/", "com.monitorkey.interface", "monitorkey");
                                 message<<QString("%1:%2").arg(KEY_NEXTSONG).arg(event.value);
                                 QDBusConnection::systemBus().send(message);
+                                qDebug()<<QString("%1:%2").arg(KEY_NEXTSONG).arg(event.value);
+                                printf("\n********bluetools下一首 keyValue:%d********\n",KEY_NEXTSONG);
+                                break;
+                            case KEY_PREVIOUSSONG:
+                                message =QDBusMessage::createSignal("/", "com.monitorkey.interface", "monitorkey");
+                                message<<QString("%1:%2").arg(KEY_PREVIOUSSONG).arg(event.value);
+                                QDBusConnection::systemBus().send(message);
+                                printf("\n********bluetools上一首 keyValue:%d********\n",KEY_PREVIOUSSONG);
                                 break;
                             default:
                                 curKey = NULL;
