@@ -1,0 +1,11 @@
+monitormickey (1.0.0-1kylin1) v101; urgency=medium
+
+  * 实现耳机hook键控制音视频播放暂停以及切换的功能
+
+ -- fengzhaoxiang <fengzhaoxiang@kylinos.cn>  Fri, 12 Mar 2021 11:16:03 +0800
+
+monitormickey (1.0.0-1) v101; urgency=medium
+
+  * Initial release (Closes: #19880)
+
+ -- liushengming <liushengming@kylinos.cn>  Sat, 06 Mar 2021 17:12:00 +0800

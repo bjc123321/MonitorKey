@@ -731,12 +731,12 @@ static struct label ff_labels[] = {
         LABEL_END,
 };
 
-static struct label key_value_labels[] = {
-        { "UP", 0 },
-        { "DOWN", 1 },
-        { "REPEAT", 2 },
-        LABEL_END,
-};
+//static struct label key_value_labels[] = {
+//        { "UP", 0 },
+//        { "DOWN", 1 },
+//        { "REPEAT", 2 },
+//        LABEL_END,
+//};
 
 class MonitorKeyEvent : public QObject
 {

@@ -10,14 +10,14 @@ CONFIG += c++11 console link_pkgconfig
 CONFIG -= app_bundle
 
 DESTDIR = .
-INCLUDEPATH += . \
-    /usr/include/polkit-qt5-1/
+#INCLUDEPATH += . \
+#    /usr/include/polkit-qt5-1/
 
-inst1.files += conf/com.monitorkey.systemdbus.service
+inst1.files += src/conf/com.monitorkey.systemdbus.service
 inst1.path = /usr/share/dbus-1/system-services/
-inst2.files += conf/com.monitorkey.systemdbus.conf
+inst2.files += src/conf/com.monitorkey.systemdbus.conf
 inst2.path = /etc/dbus-1/system.d/
-inst3.files += conf/com.monitorkey.systemdbus.policy
+inst3.files += src/conf/com.monitorkey.systemdbus.policy
 inst3.path = /usr/share/polkit-1/actions/
 
 target.source += $$TARGET
@@ -38,19 +38,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-LIBS    += -L/usr/lib/x86_64-linux-gnu/ -lpolkit-qt5-core-1
+#LIBS    += -L/usr/lib/x86_64-linux-gnu/ -lpolkit-qt5-core-1
 
 SOURCES += \
-        main.cpp \
-        monitor_key_event.cpp \
-        sysdbusregister.cpp
+        src/main.cpp \
+        src/monitor_key_event.cpp \
+        src/sysdbusregister.cpp
 
 DISTFILES += \
-    conf/com.monitorkey.systemdbus.conf \
-    conf/com.monitorkey.systemdbus.policy \
-    conf/com.monitorkey.systemdbus.service
+    src/conf/com.monitorkey.systemdbus.conf \
+    src/conf/com.monitorkey.systemdbus.policy \
+    src/conf/com.monitorkey.systemdbus.service
 
 HEADERS += \
-    monitor_key_event.h \
-    sysdbusregister.h
+    src/monitor_key_event.h \
+    src/sysdbusregister.h
 

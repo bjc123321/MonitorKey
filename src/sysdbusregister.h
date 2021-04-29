@@ -11,10 +11,12 @@
 class SysdbusRegister : public QObject, protected QDBusContext
 {
     Q_OBJECT
+
     Q_CLASSINFO("D-Bus Interface", "com.monitorkey.interface")
 public:
     SysdbusRegister();
     ~SysdbusRegister();
+private:
 
 public slots:
     Q_SCRIPTABLE int exitService();

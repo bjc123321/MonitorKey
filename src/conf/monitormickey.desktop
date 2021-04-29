@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=monitormickey
+Exec=/usr/bin/monitorkeyDbus
+Icon=audio-recorder
+Terminal=false
+Type=Application
+NoDisplay=true
+Categories=System;AudioVideo;Settings;HardwareSettings;
+StartupNotify=false

@@ -286,17 +286,6 @@ void keyScan(unsigned long cur_ms,struct input_event event, KEY_HANDLE_T *key)
 
 //***********************************************************************************************
 
-
-
-//***********************************************************************************************
-
-// static int count = 0;
-
-// void printMes(int signo)
-// {
-//     printf("Get a SIGALRM, %d counts!\n", ++count);
-// }
-
 enum {
     KEY_SINGLE_CLICK,
     KEY_DOUBLUE_CLICK,
@@ -754,7 +743,6 @@ MonitorKeyEvent::MonitorKeyEvent(int argc, char *argv[])
     opterr = 0;
     do {
         c = getopt(argc, argv, "tns:Sv::dpilqc:rh");
-        printf("c=%d\n",c);
         if (c == EOF)
             break;
         switch (c) {
@@ -879,15 +867,11 @@ MonitorKeyEvent::MonitorKeyEvent(int argc, char *argv[])
         int pollres=poll(ufds, nfds, KEY_TIME_WAIT);
         if(pollres == 0 || send_flag)
         {
-            //printf("\n*******no key press!!!********\n");
             if(key_press_count==0)
                 continue;
             else{
                 if(key_press_count>3)
                     key_press_count=3;
-//                    QDBusMessage message = QDBusMessage::createSignal("/","mickey.interface","uktest");
-//                    message << QString().append(key_press_count).append(KeepValue);
-//                    QDBusConnection::systemBus().send(message);
                 QDBusMessage message =QDBusMessage::createSignal("/", "com.monitorkey.interface", "monitorkey");
                 if(KeepValue == APP_KEY1)
                     message<<QString("%1:%2").arg(KEY_VOLUMEDOWN).arg(key_press_count);
@@ -908,7 +892,6 @@ MonitorKeyEvent::MonitorKeyEvent(int argc, char *argv[])
         for(i = 1; i < nfds; i++) {
             if(ufds[i].revents) {
                 if(ufds[i].revents & POLLIN) {//POLLIN事件
-                    //printf("poll %d",  nfds);//nfds= 21 ?
                     read(ufds[i].fd, &event, sizeof(event));
                     cur_ms = (event.time.tv_sec * 1000) + (event.time.tv_usec/1000);//时间整形
                     if(cur_ms - fir_ms>KEY_TIME_WAIT && key_press_count>0)
@@ -916,12 +899,6 @@ MonitorKeyEvent::MonitorKeyEvent(int argc, char *argv[])
                         send_flag=true;
                         continue;
                     }
-                    // if(event.type==EV_SYN)
-                    // {
-                    //     // cur_ms = (event.time.tv_sec * 1000) + (event.time.tv_usec/1000);//时间整形
-                    //     // printf("cur_ms:%ld \n",cur_ms);
-                    //     continue;
-                    // }
                     
                     if (event.type==EV_KEY)//按键情况下，(EV_KEY类型可进)
                     {
@@ -934,14 +911,22 @@ MonitorKeyEvent::MonitorKeyEvent(int argc, char *argv[])
                         QDBusMessage message;
                         switch(event.code)//三个按键，分别赋值，在keyScan进入其状态表
                         {
-                            case KEY_VOLUMEDOWN:
-                                curKey = &keyList[APP_KEY1];
-                                keyScan(cur_ms,event,curKey);//更新按键次数，以及更新保存首次按键弹起的时间
-                                break;
-                            case KEY_VOLUMEUP:
-                                curKey = &keyList[APP_KEY2];
-                                keyScan(cur_ms,event,curKey);
-                                break;
+//                            case KEY_VOLUMEDOWN:
+//                                if(key_press_count==0)
+//                                {
+//                                    fir_ms = (event.time.tv_sec * 1000) + (event.time.tv_usec/1000);//时间整形
+//                                }
+//                                curKey = &keyList[APP_KEY1];
+//                                keyScan(cur_ms,event,curKey);//更新按键次数，以及更新保存首次按键弹起的时间
+//                                break;
+//                            case KEY_VOLUMEUP:
+//                            if(key_press_count==0)
+//                                {
+//                                    fir_ms = (event.time.tv_sec * 1000) + (event.time.tv_usec/1000);//时间整形
+//                                }
+//                                curKey = &keyList[APP_KEY2];
+//                                keyScan(cur_ms,event,curKey);
+//                                break;
                             case KEY_PLAYPAUSE:
                                 if(key_press_count==0)
                                 {
@@ -983,49 +968,6 @@ MonitorKeyEvent::MonitorKeyEvent(int argc, char *argv[])
                         {
                             continue;
                         }
-                    }
-                    else if(event.type == EV_SYN)
-                    {
-//                         cur_ms = (event.time.tv_sec * 1000) + (event.time.tv_usec/1000);//时间整形
-//                         printf("--------->cur_ms:%ld type:0x%x code:%d value:%d\n",
-//                                 cur_ms,//时刻表，
-//                                 event.type,//
-//                                 event.code,//key_value值
-//                                 event.value);//value;//抬起=0，按下=1，长按=2
-                        QDBusMessage message;
-                        switch(event.code)//单击、双击、三击按键，分别赋值，在keyScan进入其状态表
-                        {
-                         case KEY_PLAYCD:
-                             message =QDBusMessage::createSignal("/", "com.monitorkey.interface", "monitorkey");
-                             //message<<QString("%1:%2").arg(KEY_PLAYCD).arg(1);
-                             message<<QString("%1:%2").arg(KEY_PLAYCD).arg(event.value);
-                             qDebug()<<"message:"<<message;
-                             QDBusConnection::systemBus().send(message);
-                             printf("\n********bluetools keyValue:%d********\n",KEY_PLAYCD);
-                             break;
-                         case KEY_PAUSECD:
-                             message =QDBusMessage::createSignal("/", "com.monitorkey.interface", "monitorkey");
-                             message<<QString("%1:%2").arg(KEY_PAUSECD).arg(event.value);
-                             QDBusConnection::systemBus().send(message);
-                             printf("\n********bluetools keyValue:%d********\n",KEY_PAUSECD);
-                            break;
-                         case KEY_NEXTSONG:
-                             message =QDBusMessage::createSignal("/", "com.monitorkey.interface", "monitorkey");
-                             message<<QString("%1:%2").arg(KEY_NEXTSONG).arg(event.value);
-                             QDBusConnection::systemBus().send(message);
-                             printf("\n********bluetools keyValue:%d********\n",KEY_NEXTSONG);
-                             break;
-                        case KEY_PREVIOUSSONG:
-                            message =QDBusMessage::createSignal("/", "com.monitorkey.interface", "monitorkey");
-                            message<<QString("%1:%2").arg(KEY_PREVIOUSSONG).arg(event.value);
-                            QDBusConnection::systemBus().send(message);
-                            printf("\n********bluetools keyValue:%d********\n",KEY_PREVIOUSSONG);
-                            break;
-                         default:
-                             curKey = NULL;
-                             break;
-                        }
-
                     }
                 }
             }

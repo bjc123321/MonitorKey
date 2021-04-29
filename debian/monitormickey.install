@@ -1,0 +1,3 @@
+src/conf/com.monitorkey.systemdbus.conf /etc/dbus-1/system.d/
+src/conf/com.monitorkey.systemdbus.policy /usr/share/polkit-1/actions/
+src/conf/com.monitorkey.service /lib/systemd/system
